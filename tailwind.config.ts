@@ -15,6 +15,9 @@ export default {
           "Segoe UI Symbol",
           "Noto Color Emoji",
         ],
+        kanit:[
+          "Kanit","sans-serif"
+        ],
       },
     },
   },
