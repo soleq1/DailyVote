@@ -1,40 +1,31 @@
-# Welcome to Remix!
+# Remix Frontend with EventSource (TypeScript)
 
-- 📖 [Remix docs](https://remix.run/docs)
+This is a **Remix frontend** application built with **TypeScript** that communicates with a **Java MySQL backend** to display real-time data updates using **EventSource**.
 
-## Development
+The project uses **Remix** as the full-stack framework for the frontend, enabling you to build a fast, scalable user interface with excellent server-side rendering (SSR) capabilities. The frontend fetches real-time updates from the backend using **EventSource**, which is a browser-native feature that allows you to receive server-sent events (SSE) for live data updates.
 
-Run the dev server:
+## Features
 
-```shellscript
-npm run dev
-```
+- Built with **Remix** and **TypeScript** for a fast, type-safe frontend.
+- Real-time updates from the **Java MySQL backend** using **EventSource**.
+- Responsive design that adapts to various screen sizes.
+- Easy-to-extend architecture, making it easy to add more features or connect to different backends.
 
-## Deployment
+## Prerequisites
 
-First, build your app for production:
+Before running the project, ensure you have the following installed:
 
-```sh
-npm run build
-```
+- [Node.js](https://nodejs.org/) (Recommended: v16 or later)
+- [npm](https://npmjs.com/) (or [Yarn](https://yarnpkg.com/) if you prefer)
+- A **Java MySQL backend** running and configured to send events via EventSource.
+- A compatible browser (modern browsers that support EventSource, such as Chrome, Firefox, Safari).
 
-Then run the app in production mode:
+## Installation
 
-```sh
-npm start
-```
+Follow these steps to get the project up and running locally.
 
-Now you'll need to pick a host to deploy it to.
+### 1. Clone the Repository
 
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+```bash
+git clone https://github.com/your-username/your-repository.git
+cd your-repository
