@@ -13,6 +13,7 @@ import "./tailwind.css";
 import { useEffect, useState } from "react";
 
 import BlobBackground from "./Components/WaveBackground";
+import { Footer } from "./Components/Footer";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,7 +45,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   
   
   return (
-    <html lang="en">
+    <html lang="en" className="">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -63,6 +64,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Scripts />
         <Outlet />
       </body>
+      {/* <Footer></Footer> */}
     </html>
   );
 }

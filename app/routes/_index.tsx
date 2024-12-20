@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 
 export const meta: MetaFunction = () => {
   return [
@@ -12,6 +13,8 @@ export default function Index() {
   const [DailyVote,setDailyVote] = useState([])
   const [totalVote,setTotalVote] = useState([])
   const [voted,setVoted] = useState(false)
+  const likeratio = useRef(0)
+  const dislikeratio = useRef(0)
   const [fullvote,setfullvote] = useState(0)
   const fallbackVotes = [
     { id: 1, name: "Fallback Vote 1", likes: 5, dislikes: 2 },
@@ -20,8 +23,12 @@ export default function Index() {
   ];
   const GetVotes = async () =>{
     try{
+      // https://votingjava-production.up.railway.app/
+      // const data = await fetch('http://localhost:8080/')
+      const data = await fetch('https://votingjava-production-a0af.up.railway.app/',{
+        method:'GET'
+      })
 
-      const data = await fetch('http://localhost:8080/')
       
      
       
@@ -33,18 +40,23 @@ export default function Index() {
       
     }catch(e){
       console.log("Failed Fetching Vote",e)
-      setDailyVote(fallbackVotes[1])
+      // setDailyVote(fallbackVotes[1])
     }
 
   }
   
 
   useEffect(() =>{
-    GetVotes()
-  
+    
+   setTimeout(() =>{
+     GetVotes()
+
+   },1000)
+   
+    
   },[])
   useEffect(() =>{
-    const eventsource = new EventSource("http://localhost:8080/realtime");
+    const eventsource = new EventSource("https://votingjava-production-a0af.up.railway.app/realtime");
 
     eventsource.onmessage = (event) =>{
       const data = JSON.parse(event.data)
@@ -64,6 +76,13 @@ export default function Index() {
     // console.log("VOTE TOTAL",totalVote)
     if (totalVote && totalVote.total_dislikes >1 ){
       let fullCount =  totalVote?.total_dislikes + totalVote?.total_likes
+      if (fullCount > 0){
+
+        likeratio.current = (totalVote?.total_likes / fullCount) * 100
+        dislikeratio.current = 100 - likeratio.current
+
+      }
+      console.log(`Like Ratio: ${Math.ceil(likeratio.current)} Dislike ratio: ${Math.floor(dislikeratio.current)}`)
       console.log("totalvote loaded", fullvote)
       if (!Number.isNaN(fullvote)){
         setfullvote(fullCount)
@@ -71,16 +90,19 @@ export default function Index() {
     }
 
   },[totalVote])
-  useEffect(() =>{
-    if (voted == true){
+  // useEffect(() =>{
+  //   if (voted == true){
 
-      setfullvote(fullvote + 1)
-    }
-  },[voted])
+  //     setfullvote(fullvote + 1)
+  //   }
+  // },[voted])
+  useEffect(() =>{
+
+  },[])
   const handleLikes = async (vote:String) =>{
     console.log(vote)
     setVoted(true)
-    const response = await fetch("http://localhost:8080/handlevote", {
+    const response = await fetch("https://votingjava-production-a0af.up.railway.app/handlevote", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -145,7 +167,36 @@ export default function Index() {
   )}
 
         </div>
-        <input type="range" max={100} min={0} disabled />
+        
+      <div className="flex w-auto mt-4">
+        <div>{totalVote?.total_dislikes || '...'}</div>
+          <input
+  type="range"
+  max={100}
+  min={0}
+  value={likeratio.current || 0} // Fallback to 0 if likeratio.current is undefined
+  disabled
+  className="
+  appearance-none w-full h-3 rounded-full 
+  bg-gray-200 cursor-not-allowed 
+  relative overflow-hidden
+  [&::-webkit-slider-runnable-track]:rounded-full
+  [&::-webkit-slider-thumb]:appearance-none
+  [&::-webkit-slider-thumb]:h-0 [&::-webkit-slider-thumb]:w-0 [&::-webkit-slider-thumb]:cursor-not-allowed
+  [&::-moz-range-thumb]:appearance-none
+  [&::-moz-range-thumb]:h-0 [&::-moz-range-thumb]:w-0
+  "
+  style={{
+    background: `linear-gradient(
+      to right, 
+      ${likeratio.current >= dislikeratio.current ? "#4caf50" : "#f44336"} ${likeratio.current || 0}%, 
+      #e5e7eb ${likeratio.current || 0}%
+      )`,
+    }}
+/>
+<div>{totalVote?.total_likes || "..."}</div>
+    </div>
+  
       </div>
   
       {/* Total Votes Section */}
@@ -156,5 +207,6 @@ export default function Index() {
       </div>
     </div>
   );
+
   
 }

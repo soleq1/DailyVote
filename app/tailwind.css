@@ -9,6 +9,10 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+
+  overflow:hidden;
+  margin: 0;
+  user-select: none;
 }
 
 .animated-blob {
